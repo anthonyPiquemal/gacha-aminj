@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CharacterCardData" format=3]
+
+[ext_resource type="Script" uid="uid://cp7dxhbqprc33" path="res://scripts/character_card_data.gd" id="1_card"]
+
+[resource]
+script = ExtResource("1_card")
+id = &"herboriste"
+display_name = "Herboriste"
+rarity = 1
+description = "Connaît chaque plante de la forêt et leurs vertus."
+hp = 95
+power = 8
+speed = 11
+defense = 5
+skill_1_name = "Bâton noueux"
+skill_1_description = "Frappe un ennemi avec son bâton."
+skill_1_action = 0
+skill_1_cooldown = 0
+skill_1_multiplier = 1.0
+skill_2_name = "Cataplasme"
+skill_2_description = "Soigne un allié avec un remède de plantes."
+skill_2_action = 1
+skill_2_cooldown = 3
+skill_2_multiplier = 1.5

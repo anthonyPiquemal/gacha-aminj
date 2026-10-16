@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CharacterCardData" format=3]
+
+[ext_resource type="Script" uid="uid://cp7dxhbqprc33" path="res://scripts/character_card_data.gd" id="1_card"]
+
+[resource]
+script = ExtResource("1_card")
+id = &"barde"
+display_name = "Barde"
+rarity = 2
+description = "Ses chansons redonnent courage au groupe."
+hp = 100
+power = 10
+speed = 14
+defense = 6
+skill_1_name = "Note aiguë"
+skill_1_description = "Frappe un ennemi avec une note stridente."
+skill_1_action = 0
+skill_1_cooldown = 0
+skill_1_multiplier = 1.0
+skill_2_name = "Hymne héroïque"
+skill_2_description = "Augmente la puissance des alliés."
+skill_2_action = 2
+skill_2_cooldown = 4
+skill_2_multiplier = 1.3

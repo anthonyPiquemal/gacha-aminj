@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CharacterCardData" format=3]
+
+[ext_resource type="Script" uid="uid://cp7dxhbqprc33" path="res://scripts/character_card_data.gd" id="1_card"]
+
+[resource]
+script = ExtResource("1_card")
+id = &"ecuyer"
+display_name = "Écuyer"
+rarity = 0
+description = "Un jeune combattant loyal, prêt à défendre ses alliés."
+hp = 120
+power = 12
+speed = 9
+defense = 8
+skill_1_name = "Coup d'épée"
+skill_1_description = "Frappe un ennemi avec son épée."
+skill_1_action = 0
+skill_1_cooldown = 0
+skill_1_multiplier = 1.0
+skill_2_name = "Charge"
+skill_2_description = "Fonce sur un ennemi et le frappe violemment."
+skill_2_action = 0
+skill_2_cooldown = 3
+skill_2_multiplier = 1.6
