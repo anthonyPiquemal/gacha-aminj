@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cj8xnf7dwj2io"]
 
-[ext_resource type="Script" uid="uid://cr1fhsfkjp2l6" path="res://scripts/main-menu.gd" id="1_ak5k6"]
+[ext_resource type="Script" uid="uid://cmh6blcyts30w" path="res://scripts/main_menu.gd" id="1_ak5k6"]
 
 [sub_resource type="Gradient" id="Gradient_d5mei"]
 
@@ -87,3 +87,8 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "QUITTER
 "
+
+[connection signal="button_down" from="BoxContainer/combat-button" to="." method="_on_combatbutton_button_down"]
+[connection signal="button_down" from="BoxContainer/tirage-button" to="." method="_on_tiragebutton_button_down"]
+[connection signal="button_down" from="BoxContainer/inventaire-button" to="." method="_on_inventairebutton_button_down"]
+[connection signal="button_down" from="BoxContainer/quitter-button" to="." method="_on_quitterbutton_button_down"]

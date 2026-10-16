@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cmkijg0yn78ts"]
 
-[ext_resource type="Script" uid="uid://562p2ns6oqvn" path="res://scripts/start-menu.gd" id="1_3qqyf"]
+[ext_resource type="Script" uid="uid://bla10wth2odu1" path="res://scripts/start_menu.gd" id="1_3qqyf"]
 
 [sub_resource type="Gradient" id="Gradient_d5mei"]
 
@@ -67,4 +67,4 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "START"
 
-[connection signal="button_down" from="BoxContainer/Start-button" to="background" method="_on_startbutton_button_down"]
+[connection signal="button_down" from="BoxContainer/Start-button" to="." method="_on_startbutton_button_down"]
