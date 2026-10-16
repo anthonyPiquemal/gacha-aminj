@@ -1,4 +1,4 @@
-# Gacha Aminj
+# Aminj impact
 
 ## Description du jeu
 
@@ -11,16 +11,12 @@ TODO
 ## Organisation du dépôt
 
 ```text
-.
-├── game/
-│   ├── audio/    # Musiques et effets sonores
-│   ├── core/     # Logique et systèmes centraux du jeu
-│   ├── data/     # Données de configuration et de gameplay
-│   ├── fonts/    # Polices utilisées par le jeu
-│   ├── images/   # Illustrations et autres ressources visuelles
-│   └── ui/       # Ressources liées à l'interface utilisateur
-├── .gitignore
-└── README.md
+res://
+├── assets/                  # Ressources graphiques et sonores
+├── data/                    # Données externes du jeu
+├── resources/               # Ressources personnalisées Godot (.tres)
+├── scenes/                  # Scènes principales (.tscn)
+└── scripts/                 # Scripts GDScript (.gd)
 ```
 
 ## Développement
