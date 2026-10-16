@@ -5,6 +5,7 @@ extends Resource
 @export var card_name: String = ""
 @export var attack: int = 1
 @export var health: int = 1
+@export var skills: Array[CardSkills] = []
 @export var color: Color = Color.WHITE
 
 
@@ -15,3 +16,9 @@ static func create(p_name: String, p_attack: int, p_health: int, p_color: Color)
 	card.health = p_health
 	card.color = p_color
 	return card
+
+func addSkill(skill: CardSkills) -> void:
+	skills.append(skill)
+	
+func removeSkill(skill: CardSkills) -> void:
+	skills.erase(skill)
