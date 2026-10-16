@@ -16,7 +16,7 @@ func _on_quitterbutton_button_down() -> void:
 
 
 func _on_combatbutton_button_down() -> void:
-	get_tree().change_scene_to_file("res://scenes/combat.tscn")
+	get_tree().change_scene_to_file("res://scenes/battle.tscn")
 
 
 func _on_tiragebutton_button_down() -> void:
