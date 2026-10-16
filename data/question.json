@@ -1,0 +1,32 @@
+[
+  {
+    "category": "Biologie",
+    "question": "Quel organe du corps humain consomme le plus d'oxygène au repos ?",
+    "choices": ["Le cœur", "Le cerveau", "Les poumons", "Le foie"],
+    "correct_index": 1
+  },
+  {
+    "category": "Musique",
+    "question": "Quel compositeur a écrit la célèbre Cinquième Symphonie ?",
+    "choices": ["Mozart", "Bach", "Beethoven", "Chopin"],
+    "correct_index": 2
+  },
+  {
+    "category": "Phys chimie",
+    "question": "Quel est le symbole chimique de l'or ?",
+    "choices": ["Ag", "Fe", "Au", "Cu"],
+    "correct_index": 2
+  },
+  {
+    "category": "Sport",
+    "question": "Combien de joueurs composent une équipe de rugby à XV sur le terrain ?",
+    "choices": ["11", "13", "15", "18"],
+    "correct_index": 2
+  },
+  {
+    "category": "Tech",
+    "question": "Quel langage de programmation utilise-t-on principalement pour coder dans Godot (hors C#) ?",
+    "choices": ["GDScript", "Python", "Lua", "TypeScript"],
+    "correct_index": 0
+  }
+]
