@@ -15,6 +15,11 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+# Bouton « ← Menu » : retour au menu principal (comme combat et inventaire).
+func _on_back_button_pressed() -> void:
+	get_tree().change_scene_to_file(\"res://scenes/Main-menu.tscn\")
 "
 
 [node name="Gacha" type="Node2D" unique_id=1249852105]
@@ -76,3 +81,14 @@ scale = Vector2(0.9496021, 1.1719207)
 [node name="Button" type="Button" parent="BoxContainer3" unique_id=1958155290]
 layout_mode = 2
 text = "Ouvrir X100"
+
+[node name="BackButton" type="Button" parent="."]
+custom_minimum_size = Vector2(120, 32)
+z_index = 10
+offset_left = 1020.0
+offset_top = 10.0
+offset_right = 1140.0
+offset_bottom = 42.0
+text = "← Menu"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
