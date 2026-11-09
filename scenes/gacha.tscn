@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cp6qgre4voper"]
 
 [ext_resource type="Texture2D" uid="uid://b78jl8365s37e" path="res://scenes/bda9c658-af4d-49cc-af9e-3617bf5e7322.png" id="1_5ckdq"]
+[ext_resource type="Texture2D" uid="uid://bb8nnpxac5iht" path="res://assets/cartes/Booster_carte.png" id="2_7y0v6"]
 
 [sub_resource type="GDScript" id="GDScript_ndbcl"]
 script/source = "extends Node2D
@@ -38,6 +39,21 @@ scale = Vector2(0.9496021, 1.1719207)
 layout_mode = 2
 action_mode = 0
 text = "Ouvrir X1"
+
+[node name="BoosterCarte" type="Sprite2D" parent="BoxContainer" unique_id=2100482660]
+position = Vector2(37.910606, -90.44981)
+scale = Vector2(0.2416071, 0.2416071)
+texture = ExtResource("2_7y0v6")
+
+[node name="BoosterCarte" type="Sprite2D" parent="BoxContainer/BoosterCarte" unique_id=1913815286]
+position = Vector2(605.84766, -3.5317764)
+scale = Vector2(0.9685812, 0.96858126)
+texture = ExtResource("2_7y0v6")
+
+[node name="BoosterCarte2" type="Sprite2D" parent="BoxContainer/BoosterCarte" unique_id=1741422693]
+position = Vector2(1159.3921, -10.595311)
+scale = Vector2(0.9685812, 0.96858126)
+texture = ExtResource("2_7y0v6")
 
 [node name="BoxContainer2" type="BoxContainer" parent="." unique_id=1977535002]
 offset_left = 192.0
