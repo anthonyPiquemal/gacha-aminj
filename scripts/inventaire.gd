@@ -294,7 +294,7 @@ func _show_detail(data: CardData) -> void:
 
 	_detail_name.text = data.card_name
 	_detail_name.add_theme_color_override("font_color", data.color.lightened(0.25))
-	_detail_stats.text = "Puissance : %d      Points de vie : %d" % [data.power, data.health]
+	_detail_stats.text = "Attaque : %d      Points de vie : %d" % [data.attack, data.health]
 
 	for child in _detail_skills.get_children():
 		child.queue_free()
@@ -328,10 +328,10 @@ func _describe_skill(skill: CardSkills) -> String:
 		var attack := skill as SkillAttack
 		var target := "à toutes les cartes adverses" if attack.target_all else "à une carte adverse"
 		var hits := "" if attack.hits <= 1 else " (%d coups)" % attack.hits
-		return "Inflige puissance × %s %s%s." % [str(attack.multiplier), target, hits]
+		return "Inflige %d dégât%s %s%s." % [attack.damage, "" if attack.damage == 1 else "s", target, hits]
 	if skill is SkillSupport:
 		var support := skill as SkillSupport
-		var stat := "de puissance" if support.stat == SkillSupport.Stat.ATTACK else "de points de vie"
+		var stat := "d'attaque" if support.stat == SkillSupport.Stat.ATTACK else "de points de vie"
 		var prefix := "-" if support.is_debuff() else "+"
 		var target := ""
 		if support.is_debuff():

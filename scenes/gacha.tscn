@@ -1,27 +1,33 @@
 [gd_scene format=3 uid="uid://cp6qgre4voper"]
 
-[ext_resource type="Texture2D" uid="uid://cumk2eay3s0l5" path="res://scenes/bda9c658-af4d-49cc-af9e-3617bf5e7322.png" id="1_5ckdq"]
+[sub_resource type="GDScript" id="GDScript_ndbcl"]
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
 
 [node name="Gacha" type="Node2D" unique_id=1249852105]
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=898777890]
-offset_left = -6.0
-offset_top = -4.0
-offset_right = 1159.0
-offset_bottom = 648.0
-texture = ExtResource("1_5ckdq")
-expand_mode = 1
+script = SubResource("GDScript_ndbcl")
 
 [node name="BoxContainer" type="BoxContainer" parent="." unique_id=339188398]
 offset_left = 63.999996
-offset_top = 219.67046
-offset_right = 125.0
-offset_bottom = 250.67046
+offset_top = 216.0
+offset_right = 131.39665
+offset_bottom = 250.132
 scale = Vector2(0.9496021, 1.1719207)
 
 [node name="Button" type="Button" parent="BoxContainer" unique_id=1900008314]
 layout_mode = 2
-text = "pull X1"
+action_mode = 0
+text = "Ouvrir X1"
 
 [node name="BoxContainer2" type="BoxContainer" parent="." unique_id=1977535002]
 offset_left = 192.0
@@ -32,7 +38,7 @@ scale = Vector2(0.9496021, 1.1719207)
 
 [node name="Button" type="Button" parent="BoxContainer2" unique_id=1580912658]
 layout_mode = 2
-text = "pull X10"
+text = "Ouvrir X10"
 
 [node name="BoxContainer3" type="BoxContainer" parent="." unique_id=60071443]
 offset_left = 320.0
@@ -43,4 +49,4 @@ scale = Vector2(0.9496021, 1.1719207)
 
 [node name="Button" type="Button" parent="BoxContainer3" unique_id=1958155290]
 layout_mode = 2
-text = "pull X100"
+text = "Ouvrir X100"

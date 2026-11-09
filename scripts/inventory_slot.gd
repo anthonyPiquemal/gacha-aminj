@@ -39,7 +39,7 @@ func set_card(p_data: CardData) -> void:
 	disabled = data == null
 	set_pressed_no_signal(false)
 	mouse_default_cursor_shape = Control.CURSOR_ARROW if disabled else Control.CURSOR_POINTING_HAND
-	tooltip_text = "" if data == null else "%s — PUI %d · PV %d" % [data.card_name, data.power, data.health]
+	tooltip_text = "" if data == null else "%s — ATQ %d · PV %d" % [data.card_name, data.attack, data.health]
 
 	if _card != null:
 		_card.queue_free()

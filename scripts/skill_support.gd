@@ -1,20 +1,16 @@
 class_name SkillSupport
 extends CardSkills
 ## Skill de soutien : buff (cartes alliées) ou debuff (cartes adverses).
-## En combat :
-## - ATTACK : +/- amount de puissance pendant `duration` tours (0 = tout le combat) ;
-## - HEALTH : BUFF soigne amount PV, DEBUFF retire amount PV (immédiat).
-## Cible unique : allié le plus blessé (buff) ou ciblage normal (debuff).
 
 enum SupportType { BUFF, DEBUFF }
 enum Stat { ATTACK, HEALTH }
 
 @export var support_type: SupportType = SupportType.BUFF
-## Statistique modifiée (ATTACK = puissance, HEALTH = points de vie).
+## Statistique modifiée (ATTACK = attaque, HEALTH = points de vie max).
 @export var stat: Stat = Stat.ATTACK
 ## Valeur absolue de la modification (toujours positive).
 @export var amount: int = 1
-## Durée en tours de combat pour ATTACK (0 = jusqu'à la fin du combat).
+## Durée en tours (0 = permanent).
 @export var duration: int = 2
 ## Vrai = affecte toutes les cartes ciblées.
 @export var target_all: bool = false
