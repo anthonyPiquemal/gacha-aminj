@@ -163,7 +163,7 @@ func _build_detail_panel() -> Control:
 
 	# Grande carte, même visuel qu'en combat, centrée verticalement.
 	_detail_card_holder = Control.new()
-	_detail_card_holder.custom_minimum_size = CardView.CARD_SIZE * DETAIL_CARD_SCALE
+	_detail_card_holder.custom_minimum_size = (CardView.CARD_SIZE * DETAIL_CARD_SCALE).round()
 	_detail_card_holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	row.add_child(_detail_card_holder)
 
@@ -288,9 +288,8 @@ func _show_detail(data: CardData) -> void:
 	if _detail_card != null:
 		_detail_card.queue_free()
 	_detail_card = CardView.new()
-	_detail_card.setup(data, false)
-	_detail_card.pivot_offset = Vector2.ZERO
-	_detail_card.scale = Vector2.ONE * DETAIL_CARD_SCALE
+	# Grande carte dessinée à sa taille réelle (texte net, pas d'étirement).
+	_detail_card.setup(data, false, DETAIL_CARD_SCALE)
 	_detail_card_holder.add_child(_detail_card)
 
 	_detail_name.text = data.card_name

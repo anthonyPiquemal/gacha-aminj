@@ -14,33 +14,36 @@ var _hp_label: Label
 var _dead: bool = false
 
 
-func setup(p_data: CardData, p_draggable: bool) -> void:
+## `p_scale` dessine la carte plus grande ou plus petite (1.0 = taille du combat).
+## Les polices et bordures sont recalculées : le texte reste net, sans étirement.
+func setup(p_data: CardData, p_draggable: bool, p_scale: float = 1.0) -> void:
 	data = p_data
 	current_hp = data.health
 	draggable = p_draggable
 
-	custom_minimum_size = CARD_SIZE
-	pivot_offset = CARD_SIZE / 2.0
+	var card_size := (CARD_SIZE * p_scale).round()
+	custom_minimum_size = card_size
+	pivot_offset = card_size / 2.0
 	if draggable:
 		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.16, 0.17, 0.23)
-	style.set_border_width_all(3)
+	style.set_border_width_all(maxi(1, roundi(3 * p_scale)))
 	style.border_color = data.color
-	style.set_corner_radius_all(8)
-	style.set_content_margin_all(6)
+	style.set_corner_radius_all(roundi(8 * p_scale))
+	style.set_content_margin_all(roundi(6 * p_scale))
 	add_theme_stylebox_override("panel", style)
 
 	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 4)
+	box.add_theme_constant_override("separation", roundi(4 * p_scale))
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(box)
 
 	var name_label := Label.new()
 	name_label.text = data.card_name
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_font_size_override("font_size", maxi(6, roundi(14 * p_scale)))
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(name_label)
 
@@ -57,12 +60,12 @@ func setup(p_data: CardData, p_draggable: bool) -> void:
 	var atk_label := Label.new()
 	atk_label.text = "ATQ %d" % data.attack
 	atk_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	atk_label.add_theme_font_size_override("font_size", 13)
+	atk_label.add_theme_font_size_override("font_size", maxi(6, roundi(13 * p_scale)))
 	atk_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stats.add_child(atk_label)
 
 	_hp_label = Label.new()
-	_hp_label.add_theme_font_size_override("font_size", 13)
+	_hp_label.add_theme_font_size_override("font_size", maxi(6, roundi(13 * p_scale)))
 	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stats.add_child(_hp_label)
 	_refresh()

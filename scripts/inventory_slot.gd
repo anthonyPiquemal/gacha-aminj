@@ -18,7 +18,7 @@ var _styles: Dictionary = {}
 
 
 func _init() -> void:
-	custom_minimum_size = CardView.CARD_SIZE * CARD_SCALE + Vector2.ONE * PADDING * 2.0
+	custom_minimum_size = (CardView.CARD_SIZE * CARD_SCALE).round() + Vector2.ONE * PADDING * 2.0
 	toggle_mode = true
 	focus_mode = Control.FOCUS_NONE
 
@@ -49,12 +49,9 @@ func set_card(p_data: CardData) -> void:
 	if data != null:
 		accent = data.color
 		_card = CardView.new()
-		_card.setup(data, false)
+		# Carte dessinée directement à la taille de la case (texte net).
+		_card.setup(data, false, CARD_SCALE)
 		_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		# CardView s'agrandit depuis son centre (animation de combat) :
-		# ici on la réduit depuis son coin pour qu'elle reste dans la case.
-		_card.pivot_offset = Vector2.ZERO
-		_card.scale = Vector2.ONE * CARD_SCALE
 		_card.position = Vector2.ONE * PADDING
 		add_child(_card)
 
