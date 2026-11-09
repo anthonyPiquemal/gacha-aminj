@@ -1,6 +1,9 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cfx1mgql7hr80"]
 
-[ext_resource type="Script" path="res://scripts/battle_scene.gd" id="1_battle"]
+[ext_resource type="Script" uid="uid://cbcs6lrf3m5uo" path="res://scripts/battle_scene.gd" id="1_battle"]
+[ext_resource type="Script" uid="uid://co0bnn2jipxp6" path="res://scripts/card_slot.gd" id="2_slot"]
+[ext_resource type="Script" uid="uid://1jck80lerm5j" path="res://scripts/battle/skill_button.gd" id="3_skill"]
+[ext_resource type="Script" uid="uid://c56i1yye5oga1" path="res://scripts/battle/battle_fx.gd" id="4_fx"]
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -10,3 +13,235 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_battle")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882, 0.117647, 0.168627, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="Root" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TopRow" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BackButton" type="Button" parent="Margin/Root/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(120, 32)
+text = "← Menu"
+
+[node name="Title" type="Label" parent="Margin/Root/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Combat 1 / 3"
+horizontal_alignment = 1
+
+[node name="PauseButton" type="Button" parent="Margin/Root/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(120, 32)
+disabled = true
+text = "⏸ Pause"
+
+[node name="SpeedButton" type="Button" parent="Margin/Root/TopRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(60, 32)
+disabled = true
+toggle_mode = true
+text = "×2"
+
+[node name="EnemyRow" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="EnemyColumn1" type="VBoxContainer" parent="Margin/Root/EnemyRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EnemySlot1" type="PanelContainer" parent="Margin/Root/EnemyRow/EnemyColumn1"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(116, 152)
+script = ExtResource("2_slot")
+
+[node name="EnemyInfo1" type="Label" parent="Margin/Root/EnemyRow/EnemyColumn1"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.7)
+custom_minimum_size = Vector2(116, 0)
+theme_override_font_sizes/font_size = 13
+text = "Compétence"
+horizontal_alignment = 1
+
+[node name="EnemyColumn2" type="VBoxContainer" parent="Margin/Root/EnemyRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EnemySlot2" type="PanelContainer" parent="Margin/Root/EnemyRow/EnemyColumn2"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(116, 152)
+script = ExtResource("2_slot")
+
+[node name="EnemyInfo2" type="Label" parent="Margin/Root/EnemyRow/EnemyColumn2"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.7)
+custom_minimum_size = Vector2(116, 0)
+theme_override_font_sizes/font_size = 13
+text = "Compétence"
+horizontal_alignment = 1
+
+[node name="EnemyColumn3" type="VBoxContainer" parent="Margin/Root/EnemyRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="EnemySlot3" type="PanelContainer" parent="Margin/Root/EnemyRow/EnemyColumn3"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(116, 152)
+script = ExtResource("2_slot")
+
+[node name="EnemyInfo3" type="Label" parent="Margin/Root/EnemyRow/EnemyColumn3"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.7)
+custom_minimum_size = Vector2(116, 0)
+theme_override_font_sizes/font_size = 13
+text = "Compétence"
+horizontal_alignment = 1
+
+[node name="RoundLabel" type="Label" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 16
+text = "Tour 1 / 15"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "VS"
+horizontal_alignment = 1
+
+[node name="PlayerRow" type="HBoxContainer" parent="Margin/Root"]
+layout_mode = 2
+
+[node name="LeftSpacer" type="Control" parent="Margin/Root/PlayerRow"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+
+[node name="PlayerSlots" type="HBoxContainer" parent="Margin/Root/PlayerRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="PlayerColumn1" type="VBoxContainer" parent="Margin/Root/PlayerRow/PlayerSlots"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayerSlot1" type="PanelContainer" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn1"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(116, 152)
+script = ExtResource("2_slot")
+
+[node name="SkillButton1" type="Button" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn1"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_skill")
+
+[node name="PlayerColumn2" type="VBoxContainer" parent="Margin/Root/PlayerRow/PlayerSlots"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayerSlot2" type="PanelContainer" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn2"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(116, 152)
+script = ExtResource("2_slot")
+
+[node name="SkillButton2" type="Button" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_skill")
+
+[node name="PlayerColumn3" type="VBoxContainer" parent="Margin/Root/PlayerRow/PlayerSlots"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayerSlot3" type="PanelContainer" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn3"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(116, 152)
+script = ExtResource("2_slot")
+
+[node name="SkillButton3" type="Button" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_skill")
+
+[node name="ActionButton" type="Button" parent="Margin/Root/PlayerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 60)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 20
+text = "Lancer la partie"
+
+[node name="DeckTitle" type="Label" parent="Margin/Root"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Votre deck — glissez jusqu'à 3 cartes"
+horizontal_alignment = 1
+
+[node name="Deck" type="PanelContainer" parent="Margin/Root"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 152)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_slot")
+
+[node name="Fx" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_fx")

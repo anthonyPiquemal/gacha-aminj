@@ -20,10 +20,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0270001
 anchor_bottom = 1.2360001
-offset_left = 27.0
-offset_top = -2.0
-offset_right = -8.104126
-offset_bottom = -157.92804
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -31.104126
+offset_bottom = -152.92804
 texture = ExtResource("2_d5mei")
 expand_mode = 1
 
