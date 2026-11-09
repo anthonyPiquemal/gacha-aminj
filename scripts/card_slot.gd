@@ -61,6 +61,10 @@ func setup(p_kind: Kind) -> void:
 
 
 func _update_placeholder() -> void:
+	# Quand la scène est libérée (Rejouer, changement de scène), le label peut
+	# déjà être détruit alors que les cartes quittent encore le holder.
+	if not is_instance_valid(_placeholder) or is_queued_for_deletion():
+		return
 	_placeholder.visible = holder.get_child_count() == 0
 
 

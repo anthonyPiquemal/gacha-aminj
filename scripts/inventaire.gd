@@ -2,6 +2,7 @@ extends Control
 ## Scène « Inventaire » : présente la collection du joueur dans une grille
 ## de 4 colonnes × 5 lignes, avec une pagination pour parcourir les pages
 ## et une fiche détaillée de la carte sélectionnée.
+## Les cartes utilisent le même visuel que le combat (CardView).
 ##
 ## Navigation : boutons de pagination, molette sur la grille,
 ## touches Page préc. / Page suiv., Échap pour revenir au menu.
@@ -14,6 +15,8 @@ const SLOTS_PER_PAGE := COLUMNS * ROWS
 const MIN_PAGES := 5
 ## Nombre maximal de boutons de numéro de page visibles à la fois.
 const MAX_PAGE_BUTTONS := 5
+## Échelle de la grande carte dans la fiche détaillée.
+const DETAIL_CARD_SCALE := 2.2
 
 const MAIN_MENU_SCENE := "res://scenes/Main-menu.tscn"
 const BACKGROUND_COLOR := Color("1b1e2b")
@@ -22,7 +25,7 @@ const ACCENT_COLOR := Color(0.35, 0.45, 0.75)
 
 var current_page: int = 0
 
-var _cards: Array[CharacterCardData] = []
+var _cards: Array[CardData] = []
 var _slots: Array[InventorySlot] = []
 var _slot_group := ButtonGroup.new()
 
@@ -35,11 +38,10 @@ var _next_button: Button
 var _last_button: Button
 var _page_numbers: HBoxContainer
 
-var _detail_card: CardFace
+var _detail_card_holder: Control
+var _detail_card: CardView
 var _detail_name: Label
-var _detail_rarity: Label
-var _detail_description: Label
-var _detail_stats: GridContainer
+var _detail_stats: Label
 var _detail_skills: VBoxContainer
 var _detail_content: Control
 var _detail_empty: Label
@@ -130,8 +132,8 @@ func _build_grid() -> Control:
 
 	_grid = GridContainer.new()
 	_grid.columns = COLUMNS
-	_grid.add_theme_constant_override("h_separation", 6)
-	_grid.add_theme_constant_override("v_separation", 6)
+	_grid.add_theme_constant_override("h_separation", 4)
+	_grid.add_theme_constant_override("v_separation", 4)
 	panel.add_child(_grid)
 
 	for i in SLOTS_PER_PAGE:
@@ -155,18 +157,15 @@ func _build_detail_panel() -> Control:
 	panel.add_child(_detail_empty)
 
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 20)
+	row.add_theme_constant_override("separation", 24)
 	panel.add_child(row)
 	_detail_content = row
 
-	var ratio := AspectRatioContainer.new()
-	ratio.ratio = CardFace.ASPECT
-	ratio.custom_minimum_size = Vector2(250, 0)
-	ratio.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	row.add_child(ratio)
-
-	_detail_card = CardFace.new()
-	ratio.add_child(_detail_card)
+	# Grande carte, même visuel qu'en combat, centrée verticalement.
+	_detail_card_holder = Control.new()
+	_detail_card_holder.custom_minimum_size = CardView.CARD_SIZE * DETAIL_CARD_SCALE
+	_detail_card_holder.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(_detail_card_holder)
 
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -178,29 +177,20 @@ func _build_detail_panel() -> Control:
 	info.add_theme_constant_override("separation", 10)
 	scroll.add_child(info)
 
-	_detail_name = _make_label("", 26)
+	_detail_name = _make_label("", 28)
 	_detail_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	info.add_child(_detail_name)
 
-	_detail_rarity = _make_label("", 16)
-	_detail_rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	info.add_child(_detail_rarity)
-
-	_detail_description = _make_label("", 15)
-	_detail_description.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_detail_description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_detail_description.modulate = Color(1, 1, 1, 0.75)
-	info.add_child(_detail_description)
-
-	info.add_child(HSeparator.new())
-
-	_detail_stats = GridContainer.new()
-	_detail_stats.columns = 4
-	_detail_stats.add_theme_constant_override("h_separation", 10)
-	_detail_stats.add_theme_constant_override("v_separation", 6)
+	_detail_stats = _make_label("", 18)
+	_detail_stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	info.add_child(_detail_stats)
 
 	info.add_child(HSeparator.new())
+
+	var skills_title := _make_label("Compétences", 18)
+	skills_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	skills_title.modulate = Color(1, 1, 1, 0.6)
+	info.add_child(skills_title)
 
 	_detail_skills = VBoxContainer.new()
 	_detail_skills.add_theme_constant_override("separation", 8)
@@ -286,7 +276,7 @@ func _select_first_card() -> void:
 		_show_detail(null)
 
 
-func _show_detail(data: CharacterCardData) -> void:
+func _show_detail(data: CardData) -> void:
 	_detail_empty.visible = data == null
 	_detail_content.visible = data != null
 	if data == null:
@@ -295,55 +285,64 @@ func _show_detail(data: CharacterCardData) -> void:
 			pressed.set_pressed_no_signal(false)
 		return
 
-	_detail_card.set_card(data, false)
-	_detail_name.text = data.display_name
-	_detail_rarity.text = data.rarity_name()
-	_detail_rarity.add_theme_color_override("font_color", data.rarity_color())
-	_detail_description.text = data.description
-	_detail_description.visible = not data.description.is_empty()
+	if _detail_card != null:
+		_detail_card.queue_free()
+	_detail_card = CardView.new()
+	_detail_card.setup(data, false)
+	_detail_card.pivot_offset = Vector2.ZERO
+	_detail_card.scale = Vector2.ONE * DETAIL_CARD_SCALE
+	_detail_card_holder.add_child(_detail_card)
 
-	for child in _detail_stats.get_children():
-		child.queue_free()
-	_add_stat_line(&"hp", "PV", data.hp)
-	_add_stat_line(&"power", "Puissance", data.power)
-	_add_stat_line(&"speed", "Vitesse", data.speed)
-	_add_stat_line(&"defense", "Défense", data.defense)
+	_detail_name.text = data.card_name
+	_detail_name.add_theme_color_override("font_color", data.color.lightened(0.25))
+	_detail_stats.text = "Attaque : %d      Points de vie : %d" % [data.attack, data.health]
 
 	for child in _detail_skills.get_children():
 		child.queue_free()
-	_add_skill(data.skill_1_name, data.skill_1_description, data.skill_1_action, data.skill_1_cooldown)
-	_add_skill(data.skill_2_name, data.skill_2_description, data.skill_2_action, data.skill_2_cooldown)
+	if data.skills.is_empty():
+		var none := _make_label("Aucune compétence.", 15)
+		none.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		none.modulate = Color(1, 1, 1, 0.6)
+		_detail_skills.add_child(none)
+	for skill in data.skills:
+		_add_skill(skill)
 
 
-func _add_stat_line(stat: StringName, label_text: String, value: int) -> void:
-	var icon := TextureRect.new()
-	icon.texture = CardArt.icon(stat)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.custom_minimum_size = Vector2(28, 28)
-	_detail_stats.add_child(icon)
-
-	var label := _make_label("%s : %d" % [label_text, value], 16)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_detail_stats.add_child(label)
-
-
-func _add_skill(skill_name: String, description: String, action: int, cooldown: int) -> void:
-	var action_names := ["Frappe", "Soin", "Renfort", "Immobilisation"]
-	var header := "%s  ·  %s" % [skill_name, action_names[action]]
-	if cooldown > 0:
-		header += "  ·  recharge %d tour%s" % [cooldown, "" if cooldown == 1 else "s"]
-	var title := _make_label(header, 16)
+func _add_skill(skill: CardSkills) -> void:
+	var header := skill.skill_name
+	if skill.cooldown > 0:
+		header += "  ·  recharge %d tour%s" % [skill.cooldown, "" if skill.cooldown == 1 else "s"]
+	var title := _make_label(header, 17)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_detail_skills.add_child(title)
 
-	if not description.is_empty():
-		var text := _make_label(description, 14)
-		text.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		text.modulate = Color(1, 1, 1, 0.7)
-		_detail_skills.add_child(text)
+	var text := _make_label(_describe_skill(skill), 15)
+	text.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	text.modulate = Color(1, 1, 1, 0.7)
+	_detail_skills.add_child(text)
+
+
+## Description lisible d'une compétence, déduite de ses paramètres.
+func _describe_skill(skill: CardSkills) -> String:
+	if skill is SkillAttack:
+		var attack := skill as SkillAttack
+		var target := "à toutes les cartes adverses" if attack.target_all else "à une carte adverse"
+		var hits := "" if attack.hits <= 1 else " (%d coups)" % attack.hits
+		return "Inflige %d dégât%s %s%s." % [attack.damage, "" if attack.damage == 1 else "s", target, hits]
+	if skill is SkillSupport:
+		var support := skill as SkillSupport
+		var stat := "d'attaque" if support.stat == SkillSupport.Stat.ATTACK else "de points de vie"
+		var prefix := "-" if support.is_debuff() else "+"
+		var target := ""
+		if support.is_debuff():
+			target = "à toutes les cartes adverses" if support.target_all else "à une carte adverse"
+		else:
+			target = "à toutes les cartes alliées" if support.target_all else "à une carte alliée"
+		var duration := "de façon permanente" if support.duration == 0 \
+				else "pendant %d tour%s" % [support.duration, "" if support.duration == 1 else "s"]
+		return "%s%d %s %s, %s." % [prefix, support.amount, stat, target, duration]
+	return ""
 
 
 # --- Entrées -----------------------------------------------------------------

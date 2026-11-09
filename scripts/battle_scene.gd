@@ -39,8 +39,20 @@ func _build_ui() -> void:
 	root.add_theme_constant_override("separation", 8)
 	margin.add_child(root)
 
-	# Adversaire
-	root.add_child(_make_label("Adversaire", 18))
+	# Adversaire (+ bouton de retour au menu à gauche)
+	var top_row := HBoxContainer.new()
+	root.add_child(top_row)
+	var back := Button.new()
+	back.text = "← Menu"
+	back.custom_minimum_size = Vector2(120, 32)
+	back.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/Main-menu.tscn"))
+	top_row.add_child(back)
+	var enemy_title := _make_label("Adversaire", 18)
+	enemy_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	top_row.add_child(enemy_title)
+	var balance := Control.new()
+	balance.custom_minimum_size = Vector2(120, 0)
+	top_row.add_child(balance)
 	root.add_child(_make_slots(enemy_slots, CardSlot.Kind.ENEMY_SLOT))
 
 	_status_label = _make_label("VS", 22)
@@ -109,15 +121,9 @@ func _fill_enemy_slots() -> void:
 		enemy_slots[i].add_card(card)
 
 
+## Le deck du joueur = les cartes de sa collection (voir l'inventaire).
 func _fill_deck() -> void:
-	var player_cards: Array[CardData] = [
-		CardData.create("Chevalier", 3, 4, Color("2980b9")),
-		CardData.create("Mage", 4, 2, Color("8e44ad")),
-		CardData.create("Voleur", 2, 3, Color("d35400")),
-		CardData.create("Paladin", 2, 5, Color("f1c40f")),
-		CardData.create("Dragonnet", 5, 1, Color("e84393")),
-	]
-	for data in player_cards:
+	for data in PlayerCollection.get_cards():
 		var card := CardView.new()
 		card.setup(data, true)
 		deck.add_card(card)
