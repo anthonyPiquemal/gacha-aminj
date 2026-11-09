@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cmkijg0yn78ts"]
 
 [ext_resource type="Script" uid="uid://bla10wth2odu1" path="res://scripts/start_menu.gd" id="1_3qqyf"]
+<<<<<<< HEAD
 [ext_resource type="Texture2D" uid="uid://i06oawal5ifg" path="res://assets/Logo jeu.jpg" id="2_d5mei"]
 
 [sub_resource type="Gradient" id="Gradient_d5mei"]
@@ -9,6 +10,9 @@
 gradient = SubResource("Gradient_d5mei")
 fill_from = Vector2(0.546875, 1)
 fill_to = Vector2(0.5295139, 0)
+=======
+[ext_resource type="Texture2D" uid="uid://b8b0eiv84x58l" path="res://scenes/gachachib.png" id="2_d5mei"]
+>>>>>>> 7ceb3e52903285809fef3e42417c97d574310fc7
 
 [sub_resource type="SystemFont" id="SystemFont_ivw1k"]
 subpixel_positioning = 0
@@ -24,36 +28,64 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3qqyf")
 
-[node name="background" type="TextureRect" parent="." unique_id=1076275587]
+[node name="fond" type="TextureRect" parent="." unique_id=27396430]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("GradientTexture2D_80iay")
+anchors_preset = -1
+anchor_right = 1.0270001
+anchor_bottom = 1.2360001
+offset_left = 27.0
+offset_top = -2.0
+offset_right = -8.104126
+offset_bottom = -157.92804
+texture = ExtResource("2_d5mei")
+expand_mode = 1
+
+[node name="cadreopaque" type="Polygon2D" parent="." unique_id=235689558]
+modulate = Color(1, 1, 1, 0.61960787)
+position = Vector2(458.00003, 111)
+scale = Vector2(1.2791328, 1)
+polygon = PackedVector2Array(10, 2, 379, 0, 377, -94, 10, -94)
 
 [node name="title" type="Label" parent="." unique_id=1502241363]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -224.0
-offset_top = 98.0
-offset_right = 224.0
-offset_bottom = 186.0
+offset_left = -94.0
+offset_top = 21.0
+offset_right = 354.0
+offset_bottom = 109.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = SubResource("SystemFont_ivw1k")
 theme_override_font_sizes/font_size = 64
 horizontal_alignment = 1
 
+<<<<<<< HEAD
 [node name="Start-button" type="Button" parent="." unique_id=1915570671]
 layout_mode = 0
 offset_left = 540.0
 offset_top = 448.0
 offset_right = 643.0
 offset_bottom = 501.0
+=======
+[node name="BoxContainer" type="BoxContainer" parent="." unique_id=1902070459]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.5
+offset_top = -26.5
+offset_right = 51.5
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Start-button" type="Button" parent="BoxContainer" unique_id=1915570671]
+layout_mode = 2
+>>>>>>> 7ceb3e52903285809fef3e42417c97d574310fc7
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32

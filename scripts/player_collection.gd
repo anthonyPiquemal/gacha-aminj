@@ -14,21 +14,17 @@ func _ready() -> void:
 	reset_to_starter()
 
 
-## Les trois cartes données au joueur au début de la partie.
+## Les trois cartes données au joueur au début de la partie (1 compétence chacune).
 static func create_starter_cards() -> Array[CardData]:
-	var chevalier := CardData.create("Chevalier", 3, 4, Color("2980b9"))
-	chevalier.addSkill(SkillAttack.create_attack("Coup d'épée", 1, 3))
-	chevalier.addSkill(SkillSupport.create_support(
-			"Cri de guerre", 3, SkillSupport.SupportType.BUFF, SkillSupport.Stat.ATTACK, 1, 2, true))
+	var chevalier := CardData.create("Chevalier", 3, 20, Color("2980b9")).with_style(CardData.AttackStyle.SWORD).with_skill(
+			SkillSupport.create_support("Cri de guerre", 3, SkillSupport.SupportType.BUFF,
+					SkillSupport.Stat.ATTACK, 2, 2, true))
 
-	var mage := CardData.create("Mage", 4, 2, Color("8e44ad"))
-	mage.addSkill(SkillAttack.create_attack("Boule de feu", 1, 4))
-	mage.addSkill(SkillAttack.create_attack("Pluie de flammes", 3, 2, 1, true))
+	var mage := CardData.create("Mage", 4, 14, Color("8e44ad")).with_style(CardData.AttackStyle.MAGIC).with_skill(
+			SkillAttack.create_attack("Pluie de flammes", 3, 1.0, 1, true))
 
-	var voleur := CardData.create("Voleur", 2, 3, Color("d35400"))
-	voleur.addSkill(SkillAttack.create_attack("Double dague", 2, 1, 2))
-	voleur.addSkill(SkillSupport.create_support(
-			"Poison", 3, SkillSupport.SupportType.DEBUFF, SkillSupport.Stat.HEALTH, 1, 3))
+	var voleur := CardData.create("Voleur", 3, 16, Color("d35400")).with_style(CardData.AttackStyle.DAGGER).with_skill(
+			SkillAttack.create_attack("Double dague", 2, 1.0, 2))
 
 	return [chevalier, mage, voleur]
 
