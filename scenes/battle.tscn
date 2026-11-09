@@ -85,6 +85,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(116, 152)
+size_flags_horizontal = 4
 script = ExtResource("2_slot")
 
 [node name="EnemyInfo1" type="Label" parent="Margin/Root/EnemyRow/EnemyColumn1"]
@@ -95,6 +96,7 @@ custom_minimum_size = Vector2(116, 0)
 theme_override_font_sizes/font_size = 13
 text = "Compétence"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="EnemyColumn2" type="VBoxContainer" parent="Margin/Root/EnemyRow"]
 layout_mode = 2
@@ -104,6 +106,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(116, 152)
+size_flags_horizontal = 4
 script = ExtResource("2_slot")
 
 [node name="EnemyInfo2" type="Label" parent="Margin/Root/EnemyRow/EnemyColumn2"]
@@ -114,6 +117,7 @@ custom_minimum_size = Vector2(116, 0)
 theme_override_font_sizes/font_size = 13
 text = "Compétence"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="EnemyColumn3" type="VBoxContainer" parent="Margin/Root/EnemyRow"]
 layout_mode = 2
@@ -123,6 +127,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(116, 152)
+size_flags_horizontal = 4
 script = ExtResource("2_slot")
 
 [node name="EnemyInfo3" type="Label" parent="Margin/Root/EnemyRow/EnemyColumn3"]
@@ -133,6 +138,7 @@ custom_minimum_size = Vector2(116, 0)
 theme_override_font_sizes/font_size = 13
 text = "Compétence"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="RoundLabel" type="Label" parent="Margin/Root"]
 unique_name_in_owner = true
@@ -170,6 +176,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(116, 152)
+size_flags_horizontal = 4
 script = ExtResource("2_slot")
 
 [node name="SkillButton1" type="Button" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn1"]
@@ -187,6 +194,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(116, 152)
+size_flags_horizontal = 4
 script = ExtResource("2_slot")
 
 [node name="SkillButton2" type="Button" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn2"]
@@ -204,6 +212,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(116, 152)
+size_flags_horizontal = 4
 script = ExtResource("2_slot")
 
 [node name="SkillButton3" type="Button" parent="Margin/Root/PlayerRow/PlayerSlots/PlayerColumn3"]

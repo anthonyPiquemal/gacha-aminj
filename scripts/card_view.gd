@@ -36,6 +36,11 @@ func setup(p_data: CardData, p_draggable: bool, p_scale: float = 1.0) -> void:
 	if draggable:
 		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
+	if data.art != null:
+		_build_art_face(p_scale)
+		_refresh()
+		return
+
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.16, 0.17, 0.23)
 	style.set_border_width_all(maxi(1, roundi(3 * p_scale)))
@@ -79,10 +84,73 @@ func setup(p_data: CardData, p_draggable: bool, p_scale: float = 1.0) -> void:
 	_refresh()
 
 
+## Zone de la carte dans les images de assets/cartes (1080 × 1080, bord noir).
+const ART_REGION := Rect2(190, 40, 700, 1000)
+
+
+## Face de carte = image complète, avec un bandeau PUI / PV par-dessus
+## (les PV restants changent en combat, l'image ne montre que les PV max).
+func _build_art_face(p_scale: float) -> void:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0)
+	style.set_border_width_all(maxi(1, roundi(2 * p_scale)))
+	style.border_color = Color(data.color, 0.0)
+	style.set_corner_radius_all(roundi(8 * p_scale))
+	add_theme_stylebox_override("panel", style)
+
+	var atlas := AtlasTexture.new()
+	atlas.atlas = data.art
+	atlas.region = ART_REGION
+	var picture := TextureRect.new()
+	picture.texture = atlas
+	picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	picture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(picture)
+
+	var layout := VBoxContainer.new()
+	layout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(layout)
+	var spacer := Control.new()
+	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layout.add_child(spacer)
+
+	var band := PanelContainer.new()
+	band.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	band.clip_contents = true
+	var band_style := StyleBoxFlat.new()
+	band_style.bg_color = Color(0, 0, 0, 0.72)
+	band_style.set_corner_radius_all(roundi(5 * p_scale))
+	band_style.set_content_margin_all(roundi(2 * p_scale))
+	band_style.content_margin_left = roundi(5 * p_scale)
+	band_style.content_margin_right = roundi(5 * p_scale)
+	band.add_theme_stylebox_override("panel", band_style)
+	layout.add_child(band)
+
+	var stats := HBoxContainer.new()
+	stats.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	band.add_child(stats)
+	_atk_label = Label.new()
+	_atk_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_atk_label.clip_text = true
+	_atk_label.add_theme_font_size_override("font_size", maxi(6, roundi(11 * p_scale)))
+	_atk_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stats.add_child(_atk_label)
+	_hp_label = Label.new()
+	_hp_label.add_theme_font_size_override("font_size", maxi(6, roundi(11 * p_scale)))
+	_hp_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stats.add_child(_hp_label)
+
+
 func _refresh() -> void:
+	# Carte illustrée : place réduite, les PV s'affichent sans préfixe, en rouge clair.
+	var hp_prefix := "" if data.art != null else "PV "
+	if data.art != null:
+		_hp_label.add_theme_color_override("font_color", Color("ff9b9b"))
 	if unit == null:
 		_atk_label.text = "PUI %d" % data.power
-		_hp_label.text = "PV %d" % current_hp
+		_hp_label.text = "%s%d" % [hp_prefix, current_hp]
 		return
 	var power := unit.power()
 	_atk_label.text = "PUI %d" % power
@@ -92,7 +160,7 @@ func _refresh() -> void:
 		_atk_label.add_theme_color_override("font_color", Color("ff7b7b"))
 	else:
 		_atk_label.remove_theme_color_override("font_color")
-	_hp_label.text = "PV %d/%d" % [unit.hp, unit.max_hp]
+	_hp_label.text = "%s%d/%d" % [hp_prefix, unit.hp, unit.max_hp]
 
 
 # --- Combat ------------------------------------------------------------------
@@ -153,7 +221,8 @@ func show_number(text: String, color: Color) -> void:
 func set_active(active: bool) -> void:
 	var style := get_theme_stylebox("panel") as StyleBoxFlat
 	if style != null:
-		style.border_color = Color.WHITE if active else data.color
+		var idle := Color(data.color, 0.0) if data.art != null else data.color
+		style.border_color = Color.WHITE if active else idle
 
 
 ## Élan vers une position (globale) puis retour : animation d'attaque.

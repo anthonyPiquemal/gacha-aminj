@@ -13,6 +13,8 @@ enum AttackStyle { SWORD, MAGIC, DAGGER, ARROW, CLAW, SMASH, FIRE }
 @export var skills: Array[CardSkills] = []
 @export var color: Color = Color.WHITE
 @export var attack_style: AttackStyle = AttackStyle.SWORD
+## Image complète de la carte (null = carte dessinée avec sa couleur).
+@export var art: Texture2D
 
 
 static func create(p_name: String, p_power: int, p_health: int, p_color: Color) -> CardData:
@@ -27,6 +29,11 @@ static func create(p_name: String, p_power: int, p_health: int, p_color: Color) 
 ## Variante chaînable : CardData.create(...).with_skill(...)
 func with_skill(skill: CardSkills) -> CardData:
 	addSkill(skill)
+	return self
+
+
+func with_art(texture: Texture2D) -> CardData:
+	art = texture
 	return self
 
 

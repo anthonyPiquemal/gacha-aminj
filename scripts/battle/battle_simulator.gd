@@ -20,6 +20,10 @@ signal power_changed(unit: BattleUnit)
 ## Bonus (amount > 0) ou malus (amount < 0) de puissance appliqué par une compétence.
 signal buff_applied(source: BattleUnit, target: BattleUnit, amount: int)
 signal unit_died(unit: BattleUnit)
+## `target` est étourdie par `source` (elle passera ses prochaines actions).
+signal stunned(source: BattleUnit, target: BattleUnit)
+## `unit` est étourdie : elle passe son action.
+signal action_skipped(unit: BattleUnit)
 signal unit_updated(unit: BattleUnit)
 ## result : 1 = victoire du joueur, -1 = défaite, 0 = égalité.
 signal battle_ended(result: int, by_timer: bool)
@@ -91,6 +95,11 @@ func _next_actor() -> BattleUnit:
 
 
 func _act(unit: BattleUnit) -> void:
+	if unit.stunned_turns > 0:
+		unit.stunned_turns -= 1
+		action_skipped.emit(unit)
+		unit_updated.emit(unit)
+		return
 	action_started.emit(unit)
 	if unit.is_skill_ready():
 		var skill := unit.skill()
@@ -109,12 +118,20 @@ func _act(unit: BattleUnit) -> void:
 func _apply_skill(unit: BattleUnit, skill: CardSkills) -> void:
 	if skill is SkillAttack:
 		var attack := skill as SkillAttack
-		var damage := maxi(1, roundi(unit.power() * attack.multiplier))
+		var damage := attack.flat_damage
+		if damage <= 0:
+			damage = maxi(1, roundi(unit.power() * attack.multiplier))
 		for hit in attack.hits:
 			var targets: Array = _alive(_opponents(unit)) if attack.target_all else [_pick_target(unit)]
 			for target: BattleUnit in targets:
 				if target != null and target.is_alive():
 					_deal(unit, target, damage)
+	elif skill is SkillStun:
+		var target := _pick_target(unit)
+		if target != null:
+			target.stunned_turns += (skill as SkillStun).turns
+			stunned.emit(unit, target)
+			unit_updated.emit(target)
 	elif skill is SkillSupport:
 		var support := skill as SkillSupport
 		var targets: Array = []
@@ -201,10 +218,10 @@ func _pick_target(unit: BattleUnit) -> BattleUnit:
 	return best
 
 
-## Allié vivant avec le plus faible ratio de PV (cible des soins et buffs).
+## Allié vivant avec le moins de PV (cible des soins et buffs).
 func _most_hurt_ally(unit: BattleUnit) -> BattleUnit:
 	var best: BattleUnit = null
 	for ally in _alive(_allies(unit)):
-		if best == null or float(ally.hp) / ally.max_hp < float(best.hp) / best.max_hp:
+		if best == null or ally.hp < best.hp:
 			best = ally
 	return best

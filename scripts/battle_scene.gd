@@ -168,6 +168,8 @@ func _start_fight() -> void:
 	_sim.damage_dealt.connect(_on_damage_dealt)
 	_sim.healed.connect(_on_healed)
 	_sim.buff_applied.connect(_on_buff_applied)
+	_sim.stunned.connect(_on_stunned)
+	_sim.action_skipped.connect(_on_action_skipped)
 	_sim.power_changed.connect(_on_unit_changed)
 	_sim.unit_updated.connect(_on_unit_changed)
 	_sim.battle_ended.connect(_on_battle_ended)
@@ -368,6 +370,31 @@ func _on_buff_applied(source: BattleUnit, target: BattleUnit, amount: int) -> vo
 		else:
 			_fx.arrows(view.center(), BattleFx.GOLD, true)
 			view.show_number("+%d PUI" % amount, BattleFx.GOLD))
+
+
+## Giffle de Guacamole : projectile vert, puis la cible est étourdie.
+func _on_stunned(source: BattleUnit, target: BattleUnit) -> void:
+	var source_view := _view(source)
+	var target_view := _view(target)
+	if target_view == null:
+		return
+	if source_view != null:
+		source_view.hop()
+		_fx.projectile(source_view.center(), target_view.center(), Color("8bc34a"), 9.0)
+	_later(BattleFx.TRAVEL, func() -> void:
+		var view := _view(target)
+		if view != null:
+			view.shake()
+			view.show_number("Étourdi !", Color("b4ff7a"))
+			_fx.star_burst(view.center(), Color("8bc34a")))
+
+
+func _on_action_skipped(unit: BattleUnit) -> void:
+	_status_label.text = "%s est étourdi et passe son tour" % unit.data.card_name
+	var view := _view(unit)
+	if view != null:
+		view.show_number("Étourdi", Color("b4ff7a"))
+		view.shake()
 
 
 func _on_healed(target: BattleUnit, amount: int) -> void:

@@ -151,6 +151,11 @@ func _draw_icon(c: Vector2, r: float, color: Color) -> void:
 			_draw_sword(c, r, color, 1.0)
 		else:
 			_draw_sword(c, r, color, 1.0)
+	elif skill is SkillStun:
+		# Étoiles qui tournent (étourdissement).
+		for i in 3:
+			var angle := -PI / 2.0 + i * TAU / 3.0
+			_draw_star(c + Vector2(cos(angle), sin(angle)) * r * 0.55, r * 0.45, Color("ffd166"))
 	elif skill is SkillSupport:
 		var support := skill as SkillSupport
 		if support.stat == SkillSupport.Stat.HEALTH:

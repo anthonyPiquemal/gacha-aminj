@@ -328,9 +328,17 @@ func _describe_skill(skill: CardSkills) -> String:
 		var attack := skill as SkillAttack
 		var target := "à toutes les cartes adverses" if attack.target_all else "à une carte adverse"
 		var hits := "" if attack.hits <= 1 else " (%d coups)" % attack.hits
-		return "Inflige puissance × %s %s%s." % [str(attack.multiplier), target, hits]
+		var amount := "puissance × %s" % str(attack.multiplier)
+		if attack.flat_damage > 0:
+			amount = "%d PV" % attack.flat_damage
+		return "Inflige %s %s%s." % [amount, target, hits]
+	if skill is SkillStun:
+		var stun := skill as SkillStun
+		return "Étourdit une carte adverse : elle passe %d action%s." % [stun.turns, "" if stun.turns == 1 else "s"]
 	if skill is SkillSupport:
 		var support := skill as SkillSupport
+		if support.stat == SkillSupport.Stat.HEALTH and not support.is_debuff():
+			return "Soigne %d PV à l'allié ayant le moins de points de vie." % support.amount
 		var stat := "de puissance" if support.stat == SkillSupport.Stat.ATTACK else "de points de vie"
 		var prefix := "-" if support.is_debuff() else "+"
 		var target := ""

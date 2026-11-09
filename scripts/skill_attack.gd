@@ -4,6 +4,8 @@ extends CardSkills
 ## cartes adverses.
 
 @export_range(0.0, 20.0, 0.05) var multiplier: float = 1.0
+## Dégâts fixes (ceux écrits sur la carte). Si > 0, remplace puissance × multiplicateur.
+@export var flat_damage: int = 0
 ## Nombre de coups portés (ex : 2 = attaque double).
 @export var hits: int = 1
 ## Vrai = touche toutes les cartes adverses.
@@ -22,4 +24,12 @@ static func create_attack(
 	skill.multiplier = p_multiplier
 	skill.hits = p_hits
 	skill.target_all = p_target_all
+	return skill
+
+
+## Attaque à dégâts fixes (ex : « inflige 32 PV »).
+static func create_flat(s_name: String, cool: int, p_damage: int,
+		p_hits: int = 1, p_target_all: bool = false) -> SkillAttack:
+	var skill := create_attack(s_name, cool, 0.0, p_hits, p_target_all)
+	skill.flat_damage = p_damage
 	return skill

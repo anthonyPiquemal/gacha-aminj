@@ -12,6 +12,8 @@ var max_hp: int
 var hp: int
 ## Actions restantes avant que la compétence soit prête (0 = prête).
 var cooldown_left: int = 0
+## Actions à passer (étourdi).
+var stunned_turns: int = 0
 ## Bonus/malus de puissance actifs : [{ "amount": int, "rounds": int }]
 ## rounds = -1 → jusqu'à la fin du combat.
 var power_mods: Array[Dictionary] = []
@@ -48,6 +50,7 @@ func power() -> int:
 ## Les PV, eux, ne sont pas restaurés.
 func prepare_for_fight() -> void:
 	power_mods.clear()
+	stunned_turns = 0
 	cooldown_left = skill().cooldown if skill() != null else 0
 
 
