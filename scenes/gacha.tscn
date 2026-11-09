@@ -1,12 +1,22 @@
 [gd_scene format=3 uid="uid://cp6qgre4voper"]
 
+[ext_resource type="Texture2D" uid="uid://cumk2eay3s0l5" path="res://scenes/bda9c658-af4d-49cc-af9e-3617bf5e7322.png" id="1_5ckdq"]
+
 [node name="Gacha" type="Node2D" unique_id=1249852105]
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=898777890]
+offset_left = -6.0
+offset_top = -4.0
+offset_right = 1159.0
+offset_bottom = 648.0
+texture = ExtResource("1_5ckdq")
+expand_mode = 1
 
 [node name="BoxContainer" type="BoxContainer" parent="." unique_id=339188398]
 offset_left = 63.999996
-offset_top = 216.0
-offset_right = 131.39665
-offset_bottom = 250.132
+offset_top = 219.67046
+offset_right = 125.0
+offset_bottom = 250.67046
 scale = Vector2(0.9496021, 1.1719207)
 
 [node name="Button" type="Button" parent="BoxContainer" unique_id=1900008314]

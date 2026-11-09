@@ -15,7 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3qqyf")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=27396430]
+[node name="fond" type="TextureRect" parent="." unique_id=27396430]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0270001
@@ -27,7 +27,7 @@ offset_bottom = -157.92804
 texture = ExtResource("2_d5mei")
 expand_mode = 1
 
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=235689558]
+[node name="cadreopaque" type="Polygon2D" parent="." unique_id=235689558]
 modulate = Color(1, 1, 1, 0.61960787)
 position = Vector2(458.00003, 111)
 scale = Vector2(1.2791328, 1)
