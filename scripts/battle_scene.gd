@@ -35,17 +35,18 @@ var _current_skill: CardSkills = null
 var _hits_in_action: int = 0
 var _fx: BattleFx
 
-var _title_label: Label
-var _status_label: Label
-var _round_label: Label
-var _action_button: Button
-var _pause_button: Button
-var _speed_button: Button
-var _deck_title: Label
+## Nœuds de la scène (battle.tscn), modifiables dans l'éditeur.
+@onready var _title_label: Label = %Title
+@onready var _status_label: Label = %StatusLabel
+@onready var _round_label: Label = %RoundLabel
+@onready var _action_button: Button = %ActionButton
+@onready var _pause_button: Button = %PauseButton
+@onready var _speed_button: Button = %SpeedButton
+@onready var _deck_title: Label = %DeckTitle
 
 
 func _ready() -> void:
-	_build_ui()
+	_setup_ui()
 	_fill_deck()
 	_enemy_teams = BattleRun.random_enemy_teams()
 	var first_team: Array[CardData] = []
@@ -60,115 +61,30 @@ func _exit_tree() -> void:
 
 # --- Construction de l'interface ---------------------------------------------
 
-func _build_ui() -> void:
-	var background := ColorRect.new()
-	background.color = Color("1b1e2b")
-	background.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(background)
+## Relie les nœuds de battle.tscn au script (la mise en page est dans la scène).
+func _setup_ui() -> void:
+	for i in range(1, SLOT_COUNT + 1):
+		var enemy_slot: CardSlot = get_node("%%EnemySlot%d" % i)
+		enemy_slot.setup(CardSlot.Kind.ENEMY_SLOT)
+		enemy_slots.append(enemy_slot)
+		_enemy_infos.append(get_node("%%EnemyInfo%d" % i))
 
-	var margin := MarginContainer.new()
-	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
-	for side in ["left", "right", "top", "bottom"]:
-		margin.add_theme_constant_override("margin_" + side, 16)
-	add_child(margin)
+		var player_slot: CardSlot = get_node("%%PlayerSlot%d" % i)
+		player_slot.setup(CardSlot.Kind.PLAYER_SLOT)
+		player_slot.cards_changed.connect(_update_ui)
+		player_slots.append(player_slot)
+		_skill_buttons.append(get_node("%%SkillButton%d" % i))
 
-	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 6)
-	margin.add_child(root)
-
-	# Barre du haut : retour, titre, pause, ×2
-	var top_row := HBoxContainer.new()
-	top_row.add_theme_constant_override("separation", 8)
-	root.add_child(top_row)
-	var back := Button.new()
-	back.text = "← Menu"
-	back.custom_minimum_size = Vector2(120, 32)
-	back.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/Main-menu.tscn"))
-	top_row.add_child(back)
-	_title_label = _make_label("", 20)
-	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top_row.add_child(_title_label)
-	_pause_button = Button.new()
-	_pause_button.custom_minimum_size = Vector2(120, 32)
-	_pause_button.pressed.connect(_on_pause_pressed)
-	top_row.add_child(_pause_button)
-	_speed_button = Button.new()
-	_speed_button.text = "×2"
-	_speed_button.toggle_mode = true
-	_speed_button.custom_minimum_size = Vector2(60, 32)
-	_speed_button.toggled.connect(func(on: bool) -> void: Engine.time_scale = 2.0 if on else 1.0)
-	top_row.add_child(_speed_button)
-
-	root.add_child(_make_slots(enemy_slots, CardSlot.Kind.ENEMY_SLOT))
-
-	_round_label = _make_label("", 16)
-	_round_label.modulate = Color(1, 1, 1, 0.6)
-	root.add_child(_round_label)
-	_status_label = _make_label("", 20)
-	root.add_child(_status_label)
-
-	# Slots du joueur + bouton d'action à droite
-	var player_row := HBoxContainer.new()
-	root.add_child(player_row)
-	var left_spacer := Control.new()
-	left_spacer.custom_minimum_size = Vector2(190, 0)
-	player_row.add_child(left_spacer)
-	var slots_row := _make_slots(player_slots, CardSlot.Kind.PLAYER_SLOT)
-	slots_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	player_row.add_child(slots_row)
-	_action_button = Button.new()
-	_action_button.custom_minimum_size = Vector2(190, 60)
-	_action_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_action_button.add_theme_font_size_override("font_size", 20)
-	_action_button.pressed.connect(_on_action_pressed)
-	player_row.add_child(_action_button)
-
-	# Deck en bas (visible seulement pendant la sélection)
-	_deck_title = _make_label("Votre deck — glissez jusqu'à 3 cartes", 16)
-	root.add_child(_deck_title)
-	deck = CardSlot.new()
+	deck = %Deck
 	deck.setup(CardSlot.Kind.DECK)
 	deck.cards_changed.connect(_update_ui)
-	root.add_child(deck)
+	_fx = %Fx
+	_round_label.text = ""
 
-	_fx = BattleFx.new()
-	add_child(_fx)
-
-
-func _make_label(text: String, font_size: int) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", font_size)
-	return label
-
-
-## Une colonne par slot : la carte, puis le bouton de compétence (joueur)
-## ou l'état de la compétence (ennemi).
-func _make_slots(target: Array[CardSlot], kind: CardSlot.Kind) -> HBoxContainer:
-	var row := HBoxContainer.new()
-	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", 24)
-	for i in SLOT_COUNT:
-		var column := VBoxContainer.new()
-		column.add_theme_constant_override("separation", 4)
-		row.add_child(column)
-		var slot := CardSlot.new()
-		slot.setup(kind)
-		slot.cards_changed.connect(_update_ui)
-		column.add_child(slot)
-		target.append(slot)
-		if kind == CardSlot.Kind.PLAYER_SLOT:
-			var button := SkillButton.new()
-			column.add_child(button)
-			_skill_buttons.append(button)
-		else:
-			var info := _make_label("", 13)
-			info.custom_minimum_size = Vector2(CardView.CARD_SIZE.x + 16, 0)
-			info.modulate = Color(1, 1, 1, 0.7)
-			column.add_child(info)
-			_enemy_infos.append(info)
-	return row
+	%BackButton.pressed.connect(func() -> void: get_tree().change_scene_to_file("res://scenes/Main-menu.tscn"))
+	_pause_button.pressed.connect(_on_pause_pressed)
+	_speed_button.toggled.connect(func(on: bool) -> void: Engine.time_scale = 2.0 if on else 1.0)
+	_action_button.pressed.connect(_on_action_pressed)
 
 
 func _fill_deck() -> void:
@@ -515,6 +431,7 @@ func _update_ui() -> void:
 			_action_button.text = "Rejouer"
 			_action_button.disabled = false
 
+	_round_label.visible = _phase != Phase.SELECT
 	_pause_button.text = "▶ Reprendre" if _paused else "⏸ Pause"
 	_pause_button.disabled = _phase != Phase.FIGHTING
 	_speed_button.disabled = _phase == Phase.SELECT or _phase == Phase.OVER
@@ -528,14 +445,10 @@ func _update_ui() -> void:
 func _update_skill_button(index: int) -> void:
 	var button := _skill_buttons[index]
 	var unit := _player_unit(index)
-	if _phase == Phase.SELECT or unit == null:
-		# Aperçu pendant la sélection : icône de la carte posée, non cliquable.
-		var card := player_slots[index].get_card()
-		var preview: CardSkills = card.data.get_skill() if card != null else null
-		if preview != null:
-			button.set_state(preview, card.data.color, 0, false, false)
-		else:
-			button.clear()
+	# Pendant la sélection, les indicateurs sont masqués pour laisser la place au deck.
+	button.visible = _phase != Phase.SELECT
+	if unit == null:
+		button.clear()
 		return
 	if not unit.is_alive() or unit.skill() == null:
 		button.clear()

@@ -1,7 +1,14 @@
 [gd_scene format=3 uid="uid://cj8xnf7dwj2io"]
 
 [ext_resource type="Script" uid="uid://cmh6blcyts30w" path="res://scripts/main_menu.gd" id="1_ak5k6"]
-[ext_resource type="Texture2D" uid="uid://c0nnfky237n2c" path="res://scenes/cartechib.png" id="2_ewema"]
+[ext_resource type="Texture2D" uid="uid://b50d108r17ssv" path="res://scenes/cartechib.png" id="2_ewema"]
+
+[sub_resource type="Gradient" id="Gradient_d5mei"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ewema"]
+gradient = SubResource("Gradient_d5mei")
+fill_from = Vector2(0.546875, 1)
+fill_to = Vector2(0.5295139, 0)
 
 [sub_resource type="SystemFont" id="SystemFont_ak5k6"]
 subpixel_positioning = 0
@@ -15,18 +22,29 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ak5k6")
 
-[node name="fond" type="TextureRect" parent="." unique_id=718677512]
+[node name="background" type="TextureRect" parent="." unique_id=161650797]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_ewema")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1392922322]
 layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 646.0
+offset_left = -12.0
+offset_top = -3.0
+offset_right = 1158.0
+offset_bottom = 654.0
 texture = ExtResource("2_ewema")
 expand_mode = 1
 
-[node name="cadreopaque" type="Polygon2D" parent="fond" unique_id=118404508]
-modulate = Color(1, 1, 1, 0.61960787)
-position = Vector2(332.00003, 191)
-scale = Vector2(1.2791328, 1)
-polygon = PackedVector2Array(10, 2, 379, 0, 377, -94, 10, -94)
+[node name="Polygon2D" type="Polygon2D" parent="TextureRect" unique_id=1799973461]
+modulate = Color(1, 1, 1, 0.6862745)
+position = Vector2(88, -91)
+scale = Vector2(1.0695068, 1)
+polygon = PackedVector2Array(241, 183, 241, 279, 684, 282, 685.68823, 227.97385, 687, 186)
 
 [node name="title" type="Label" parent="." unique_id=810618392]
 layout_mode = 1
@@ -49,10 +67,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -306.0
-offset_top = 302.0
-offset_right = 302.0
-offset_bottom = 355.0
+offset_left = -292.0
+offset_top = 279.0
+offset_right = 316.0
+offset_bottom = 512.0
 grow_horizontal = 2
 theme_override_constants/separation = 7
 vertical = true
