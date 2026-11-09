@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://co0bnn2jipxp6" path="res://scripts/card_slot.gd" id="2_slot"]
 [ext_resource type="Script" uid="uid://1jck80lerm5j" path="res://scripts/battle/skill_button.gd" id="3_skill"]
 [ext_resource type="Script" uid="uid://c56i1yye5oga1" path="res://scripts/battle/battle_fx.gd" id="4_fx"]
+[ext_resource type="AudioStream" uid="uid://cefrsu2nwec4w" path="res://assets/sounds/victoire.wav" id="5_win"]
+[ext_resource type="AudioStream" uid="uid://cojuppq8oe0xg" path="res://assets/sounds/defaite.mp3" id="6_lose"]
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -254,3 +256,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_fx")
+
+[node name="VictorySound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_win")
+
+[node name="DefeatSound" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("6_lose")

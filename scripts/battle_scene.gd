@@ -158,6 +158,7 @@ func _start_run() -> void:
 
 
 func _start_fight() -> void:
+	%VictorySound.stop()
 	var enemies := _run.create_enemies()
 	_show_enemies(_run.current_enemy_team(), enemies)
 
@@ -199,6 +200,12 @@ func _run_loop(sim: BattleSimulator) -> void:
 
 func _on_battle_ended(result: int, by_timer: bool) -> void:
 	var suffix := " (temps écoulé, plus de PV)" if by_timer and result != 0 else ""
+	# Sons de fin (nœuds VictorySound / DefeatSound de battle.tscn) :
+	# victoire seulement quand les 3 combats sont gagnés.
+	if result > 0 and _run.is_last_fight():
+		%VictorySound.play()
+	elif result < 0:
+		%DefeatSound.play()
 	if result > 0 and not _run.is_last_fight():
 		_phase = Phase.BETWEEN
 		_status_label.text = "Victoire !%s Vos PV ne sont pas restaurés." % suffix
