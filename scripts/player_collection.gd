@@ -58,3 +58,10 @@ func get_cards() -> Array[CardData]:
 
 func count() -> int:
 	return _cards.size()
+
+## Ajoute une liste de cartes à la collection (utilisé par le booster).
+func add_cards(cards: Array[CardData]) -> void:
+	for card in cards:
+		if card != null:
+			_cards.append(card)
+	collection_changed.emit()
